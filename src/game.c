@@ -1,6 +1,7 @@
 #include "game.h"
 #include "draw.h"
 #include "board.h"
+#include "menu.h"
 
 #include <time.h>
 
@@ -10,7 +11,6 @@ static const int color_white[] = {0xFF, 0xFF, 0xFF, 0xFF};
 
 Game * Game_Create(void){
 	Game *game;
-	//srand(4);
 	srand(time(NULL));
 
 	game = (Game *) malloc(sizeof(Game));
@@ -18,21 +18,21 @@ Game * Game_Create(void){
 	game->context = Context_Create("Campo Minado");
 
 	game->board_texture = Texture_Load(game->context, "res/tile.png", 16, 16);
+	game->button_texture = Texture_Load(game->context, "res/button.png", 160, 32);
 
-	game->board = (void *) Board_Create(9, 9, 10);
+	Menu_Init();
 	
 	return game;
 }
 
 void Game_Update(Game *game){
-	Board_Update(game, game->board);
+	Menu_Update(game);
 }
 
 void Game_Render(Game *game){
 	SDL_SetRenderDrawColor(game->context->renderer, 0x10, 0x10, 0x10, 0xff);
 	SDL_RenderClear(game->context->renderer);
-	//Draw_DrawRect(game->context, NULL, color_grey);
-	Board_Render(game, game->board);
+	Menu_Render(game);
 	SDL_RenderPresent(game->context->renderer);
 }
 
@@ -48,7 +48,8 @@ void Game_Run(Game *game){
 }
 
 void Game_Destroy(Game *game){
-	Board_Destroy(game->board);
+	Menu_Quit();
 	Texture_Destroy(game->board_texture);
+	Texture_Destroy(game->button_texture);
 	Context_Destroy(game->context);
 }

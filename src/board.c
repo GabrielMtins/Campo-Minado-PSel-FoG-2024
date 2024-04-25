@@ -1,6 +1,10 @@
 #include "board.h"
+#include "draw.h"
 
 #define TILE_SIZE 16
+
+static const int color_mouse_over[4] = {255, 255, 255, 60};
+static const int color_mouse_click[4] = {255, 255, 255, 200};
 
 static int Board_CheckBounds(Board *board, int x, int y);
 static int Board_BombCount(Board *board, int x, int y);
@@ -152,6 +156,43 @@ Board * Board_Create(int width, int height, int bombs){
 	return board;
 }
 
+int Board_HasLost(Board *board){
+	int id;
+
+	for(int i = 0; i < board->width; i++){
+		for(int j = 0; j < board->height; j++){
+			id = i + j * board->width;
+
+			/* Se há uma bomba que foi exposta */
+			if(board->shown[id] == SHOWN && board->tile[id] == TILE_HAS_BOMB)
+				return 1;
+		}
+	}
+
+	return 0;
+}
+
+int Board_HasWon(Board *board){
+	int id;
+	/* Basicamente, o jogo é ganhado quando todos os blocos
+	 * que não são bombas são expostos. */
+
+	if(Board_HasLost(board)) return 0;
+
+	for(int i = 0; i < board->width; i++){
+		for(int j = 0; j < board->height; j++){
+			id = i + j * board->width;
+
+			/* Se há um tile que não é uma bomba e não foi exposta,
+			 * o jogo não foi ganho ainda */
+			if(board->shown[id] != SHOWN && board->tile[id] != TILE_HAS_BOMB)
+				return 0;
+		}
+	}
+
+	return 1;
+}
+
 void Board_Update(Game *game, Board *board){
 	int tile_mouse_x, tile_mouse_y;
 	uint32_t new_mouse_state;
@@ -199,9 +240,6 @@ void Board_Render(Game *game, Board *board){
 
 			if(board->shown[id] == SHOWN_FLAG) texture_id = TILE_ID_FLAG;
 
-			if(board->mouse_down && i == tile_mouse_x && j == tile_mouse_y)
-				texture_id = 0;
-
 			Texture_RenderCell(
 					game->context, 
 					game->board_texture,
@@ -209,6 +247,19 @@ void Board_Render(Game *game, Board *board){
 					j * TILE_SIZE + offset_y,
 					texture_id
 					);
+
+			if(i == tile_mouse_x && j == tile_mouse_y){
+				int rect[4] = {
+					i * TILE_SIZE + offset_x,
+					j * TILE_SIZE + offset_y,
+					TILE_SIZE, TILE_SIZE
+				};
+
+				if(board->mouse_down)
+					Draw_DrawRect(game->context, rect, color_mouse_click);
+				else
+					Draw_DrawRect(game->context, rect, color_mouse_over);
+			}
 		}
 	}
 }

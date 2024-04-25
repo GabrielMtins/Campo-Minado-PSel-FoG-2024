@@ -19,7 +19,6 @@ Context * Context_Create(const char *title){
 			SDL_WINDOWPOS_CENTERED,
 			context->window_width,
 			context->window_height,
-			//SDL_WINDOW_SHOWN
 			SDL_WINDOW_RESIZABLE
 			);
 
@@ -27,10 +26,11 @@ Context * Context_Create(const char *title){
 			context->window,
 			-1,
 			0
-			//SDL_RENDERER_PRESENTVSYNC
 			);
 
 	SDL_RenderSetLogicalSize(context->renderer, INTERNAL_WIDTH, INTERNAL_HEIGHT);
+
+	SDL_SetRenderDrawBlendMode(context->renderer, SDL_BLENDMODE_BLEND);
 
 	context->font = NULL;
 

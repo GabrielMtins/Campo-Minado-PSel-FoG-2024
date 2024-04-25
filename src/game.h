@@ -7,7 +7,7 @@
 typedef struct{
 	Context *context;
 	Texture *board_texture;
-	void *board;
+	Texture *button_texture;
 } Game;
 
 Game * Game_Create(void);

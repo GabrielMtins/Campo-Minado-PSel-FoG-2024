@@ -32,6 +32,10 @@ typedef struct{
 
 Board * Board_Create(int width, int height, int bombs);
 
+int Board_HasLost(Board *board);
+
+int Board_HasWon(Board *board);
+
 void Board_Update(Game *game, Board *board);
 
 void Board_Render(Game *game, Board *board);
