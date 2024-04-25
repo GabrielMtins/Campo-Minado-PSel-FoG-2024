@@ -20,7 +20,7 @@ Game * Game_Create(void){
 	game->board_texture = Texture_Load(game->context, "res/tile.png", 16, 16);
 	game->button_texture = Texture_Load(game->context, "res/button.png", 160, 32);
 
-	Menu_Init();
+	Menu_Init(game);
 	
 	return game;
 }

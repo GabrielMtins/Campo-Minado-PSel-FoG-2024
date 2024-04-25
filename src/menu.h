@@ -3,7 +3,7 @@
 
 #include "game.h"
 
-void Menu_Init(void);
+void Menu_Init(Game *game);
 
 void Menu_Update(Game *game);
 
