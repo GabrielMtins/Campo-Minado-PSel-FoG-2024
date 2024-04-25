@@ -10,8 +10,8 @@ static const int color_white[] = {0xFF, 0xFF, 0xFF, 0xFF};
 
 Game * Game_Create(void){
 	Game *game;
-	srand(4);
-	//srand(time(NULL));
+	//srand(4);
+	srand(time(NULL));
 
 	game = (Game *) malloc(sizeof(Game));
 

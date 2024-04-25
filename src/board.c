@@ -8,7 +8,8 @@ static void Board_Generate(Board *board);
 static void Board_GetOffset(Board *board, int *offset_x, int *offset_y);
 static void Board_GetMouseTile(Game *game, Board *board, int *tile_x, int *tile_y);
 static void Board_FloodFill(Board *board, int x, int y);
-static void Board_ShowTile(Board *board, int x, int y);
+static void Board_OpenTile(Board *board, int x, int y);
+static void Board_PutFlag(Board *board, int x, int y);
 
 static int Board_CheckBounds(Board *board, int x, int y){
 	if(x < 0 || y < 0 || x >= board->width || y >= board->height) return 0;
@@ -84,7 +85,7 @@ static void Board_FloodFill(Board *board, int x, int y){
 	id = x + y * board->width;
 
 	if(!Board_CheckBounds(board, x, y)) return;
-	if(board->shown[id] == 1) return;
+	if(board->shown[id] != NOT_SHOWN) return;
 	if(board->tile[id] == TILE_HAS_BOMB) return;
 
 	board->shown[id] = 1;
@@ -101,7 +102,7 @@ static void Board_FloodFill(Board *board, int x, int y){
 	}
 }
 
-static void Board_ShowTile(Board *board, int x, int y){
+static void Board_OpenTile(Board *board, int x, int y){
 	int id;
 
 	if(!Board_CheckBounds(board, x, y)) return;
@@ -110,7 +111,23 @@ static void Board_ShowTile(Board *board, int x, int y){
 
 	Board_FloodFill(board, x, y);
 
-	board->shown[id] = 1;
+	board->shown[id] = SHOWN;
+}
+
+static void Board_PutFlag(Board *board, int x, int y){
+	int id;
+
+	if(!Board_CheckBounds(board, x, y)) return;
+
+	id = x + y * board->width;
+
+	if(board->shown[id] == SHOWN) return;
+
+	if(board->shown[id] == SHOWN_FLAG)
+		board->shown[id] = NOT_SHOWN;
+	else
+		board->shown[id] = SHOWN_FLAG;
+
 }
 
 Board * Board_Create(int width, int height, int bombs){
@@ -137,16 +154,25 @@ Board * Board_Create(int width, int height, int bombs){
 
 void Board_Update(Game *game, Board *board){
 	int tile_mouse_x, tile_mouse_y;
+	uint32_t new_mouse_state;
 
-	if(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(1)){
+	new_mouse_state = SDL_GetMouseState(NULL, NULL);
+
+	if(new_mouse_state){
 		board->mouse_down = 1;
 		board->mouse_up = 0;
+		board->mouse_state = new_mouse_state;
 	}
 	else if(board->mouse_down == 1 && board->mouse_up == 1){
 		board->mouse_down = 0;
-
 		Board_GetMouseTile(game, board, &tile_mouse_x, &tile_mouse_y);
-		Board_ShowTile(board, tile_mouse_x, tile_mouse_y);
+
+		if(board->mouse_state & SDL_BUTTON(1)){
+			Board_OpenTile(board, tile_mouse_x, tile_mouse_y);
+		}
+		else if(board->mouse_state & SDL_BUTTON(3)){
+			Board_PutFlag(board, tile_mouse_x, tile_mouse_y);
+		}
 	}
 	else{
 		board->mouse_up = 1;
@@ -167,9 +193,11 @@ void Board_Render(Game *game, Board *board){
 
 			texture_id = Board_BombCount(board, i, j);
 
-			if(board->tile[id] == TILE_HAS_BOMB) texture_id = 10;
+			if(board->tile[id] == TILE_HAS_BOMB) texture_id = TILE_ID_BOMB;
 
-			if(!board->shown[id]) texture_id = 11;
+			if(board->shown[id] == NOT_SHOWN) texture_id = TILE_ID_NOTOPEN;
+
+			if(board->shown[id] == SHOWN_FLAG) texture_id = TILE_ID_FLAG;
 
 			if(board->mouse_down && i == tile_mouse_x && j == tile_mouse_y)
 				texture_id = 0;

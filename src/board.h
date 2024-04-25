@@ -2,6 +2,15 @@
 #define BOARD_H
 
 #define TILE_HAS_BOMB 1
+#define TILE_ID_FLAG 12
+#define TILE_ID_NOTOPEN 11
+#define TILE_ID_BOMB 10
+
+enum SHOWN{
+	NOT_SHOWN = 0,
+	SHOWN,
+	SHOWN_FLAG
+};
 
 #include "game.h"
 
@@ -16,6 +25,7 @@ typedef struct{
 	int texture_width;
 	int texture_height;
 
+	uint32_t mouse_state;
 	int mouse_down;
 	int mouse_up;
 } Board;
