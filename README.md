@@ -26,6 +26,11 @@ há bombas ao redor é aberto).
 - Salvar em arquivo os recordes dos melhores tempos em cada dificuldade
 e permitir que o usuário veja o ranking.
 
+### Metas que eu criei
+- Implementar suporte para jogar o jogo com controle / teclado.
+- Portar o jogo para consoles por meio de homebrew.
+- Fazer uma música de fundo.
+
 ### Metas que provavelmente não irei implementar
 - Opção de dificuldade personalizada.
 - Função de abrir quadrados em volta se todas as bombas ao redor
