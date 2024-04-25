@@ -6,13 +6,13 @@
 #define TILE_ID_NOTOPEN 11
 #define TILE_ID_BOMB 10
 
+#include "game.h"
+
 enum SHOWN{
 	NOT_SHOWN = 0,
 	SHOWN,
 	SHOWN_FLAG
 };
-
-#include "game.h"
 
 typedef struct{
 	int *tile;
@@ -28,6 +28,8 @@ typedef struct{
 	uint32_t mouse_state;
 	int mouse_down;
 	int mouse_up;
+
+	int first_move;
 } Board;
 
 Board * Board_Create(int width, int height, int bombs);

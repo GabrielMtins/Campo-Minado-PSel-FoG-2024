@@ -8,7 +8,7 @@ static const int color_mouse_click[4] = {255, 255, 255, 200};
 
 static int Board_CheckBounds(Board *board, int x, int y);
 static int Board_BombCount(Board *board, int x, int y);
-static void Board_Generate(Board *board);
+static void Board_Generate(Board *board, int og_x, int og_y);
 static void Board_GetOffset(Board *board, int *offset_x, int *offset_y);
 static void Board_GetMouseTile(Game *game, Board *board, int *tile_x, int *tile_y);
 static void Board_FloodFill(Board *board, int x, int y);
@@ -45,8 +45,8 @@ static int Board_BombCount(Board *board, int x, int y){
 	return num_bombs;
 }
 
-static void Board_Generate(Board *board){
-	int id;
+static void Board_Generate(Board *board, int og_x, int og_y){
+	int x, y, id;
 
 	for(int i = 0; i < board->width * board->height; i++){
 		board->shown[i] = 0;
@@ -54,9 +54,12 @@ static void Board_Generate(Board *board){
 	}
 
 	for(int i = 0; i < board->bombs; i++){
-		id = rand() % (board->width * board->height);
+		x = rand() % board->width;
+		y = rand() % board->height;
 
-		if(board->tile[id] == TILE_HAS_BOMB){
+		id = x + y * board->width;
+
+		if(board->tile[id] == TILE_HAS_BOMB || abs(x - og_x) <= 1 || abs(y - og_y) <= 1){
 			i--;
 			continue;
 		}
@@ -113,6 +116,11 @@ static void Board_OpenTile(Board *board, int x, int y){
 
 	id = x + y * board->width;
 
+	if(board->first_move){
+		Board_Generate(board, x, y);
+		board->first_move = 0;
+	}
+
 	if(board->shown[id] == SHOWN_FLAG) return;
 
 	Board_FloodFill(board, x, y);
@@ -152,8 +160,10 @@ Board * Board_Create(int width, int height, int bombs){
 	board->texture_height = board->height * TILE_SIZE;
 	board->mouse_down = 0;
 	board->mouse_up = 1;
+
+	board->first_move = 1;
 	
-	Board_Generate(board);
+	Board_Generate(board, 0, 0);
 
 	return board;
 }
