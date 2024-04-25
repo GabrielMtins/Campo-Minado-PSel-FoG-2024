@@ -114,7 +114,7 @@ void Menu_Update(Game *game){
 
 			if(Menu_PressedButton(game, rect)){
 				menu.state = MENU_PLAY;
-				menu.board = Board_Create(9, 9, 10);
+				menu.board = Board_Create(16, 16, 40);
 			}
 
 			break;

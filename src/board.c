@@ -89,10 +89,10 @@ static void Board_FloodFill(Board *board, int x, int y){
 	id = x + y * board->width;
 
 	if(!Board_CheckBounds(board, x, y)) return;
-	if(board->shown[id] != NOT_SHOWN) return;
+	if(board->shown[id] == SHOWN) return;
 	if(board->tile[id] == TILE_HAS_BOMB) return;
 
-	board->shown[id] = 1;
+	board->shown[id] = SHOWN;
 
 	if(Board_BombCount(board, x, y) == 0){
 		Board_FloodFill(board, x - 1, y);
@@ -112,6 +112,8 @@ static void Board_OpenTile(Board *board, int x, int y){
 	if(!Board_CheckBounds(board, x, y)) return;
 
 	id = x + y * board->width;
+
+	if(board->shown[id] == SHOWN_FLAG) return;
 
 	Board_FloodFill(board, x, y);
 

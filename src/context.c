@@ -86,7 +86,6 @@ void Context_PollEvent(Context *context){
 						&context->window_width,
 						&context->window_height
 						);
-				printf("%d %d\n", context->window_width, context->window_height);
 			}
 		}
 	}
