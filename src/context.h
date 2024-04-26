@@ -10,6 +10,7 @@
 
 #define INTERNAL_WIDTH 640
 #define INTERNAL_HEIGHT 360
+#define FPS_MAX 60
 
 typedef struct{
 	SDL_Window *window;

@@ -94,6 +94,12 @@ void Context_PollEvent(Context *context){
 void Context_UpdateTime(Context *context){
 	int new_time = SDL_GetTicks();
 
+	if(new_time - context->first_time < 1000 / FPS_MAX){
+		SDL_Delay(1000 / FPS_MAX - new_time + context->first_time);
+	}
+
+	new_time = SDL_GetTicks();
+
 	context->delta_time = 0.001 * (new_time - context->first_time);
 	
 	context->first_time = new_time;

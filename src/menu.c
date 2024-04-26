@@ -119,6 +119,7 @@ static Button Button_Create(int x, int y, int ini, int end, Texture *texture, in
 
 static void Button_Reset(Button *button){
 	button->timer = 0;
+	button->y = button->ini;
 }
 
 static void Button_Update(Game *game, Button *button){
