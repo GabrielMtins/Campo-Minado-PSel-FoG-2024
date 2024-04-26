@@ -18,6 +18,8 @@ há bombas ao redor é aberto).
 - O jogador nunca perde no primeiro quadrado que clica.
 - Colocar bandeirinhas.
 - Montar três opções de dificuldade (iniciante, intermediário, avançado).
+- Função de abrir quadrados em volta se todas as bombas ao redor
+estão assinaladas.
 
 ### Não Realizadas
 - Construir uma interface para o usuário
@@ -33,5 +35,3 @@ e permitir que o usuário veja o ranking.
 
 ### Metas que provavelmente não irei implementar
 - Opção de dificuldade personalizada.
-- Função de abrir quadrados em volta se todas as bombas ao redor
-estão assinaladas.
