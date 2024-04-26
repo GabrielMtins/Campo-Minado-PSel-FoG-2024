@@ -17,10 +17,10 @@ recebe uma mensagem de vitória e o jogo é encerrado.
 há bombas ao redor é aberto).
 - O jogador nunca perde no primeiro quadrado que clica.
 - Colocar bandeirinhas.
+- Montar três opções de dificuldade (iniciante, intermediário, avançado).
 
 ### Não Realizadas
 - Construir uma interface para o usuário
-- Montar três opções de dificuldade (iniciante, intermediário, avançado).
 - Opção de reinício de partida.
 - Contador de tempo.
 - Salvar em arquivo os recordes dos melhores tempos em cada dificuldade
