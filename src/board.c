@@ -14,6 +14,8 @@ static void Board_GetMouseTile(Game *game, Board *board, int *tile_x, int *tile_
 static void Board_FloodFill(Board *board, int x, int y);
 static void Board_OpenTile(Board *board, int x, int y);
 static void Board_PutFlag(Board *board, int x, int y);
+static void Board_PutFlagOnAllBombs(Board *board);
+static void Board_OpenAdjacentIfFlagged(Board *board, int x, int y);
 
 static int Board_CheckBounds(Board *board, int x, int y){
 	if(x < 0 || y < 0 || x >= board->width || y >= board->height) return 0;
@@ -121,7 +123,14 @@ static void Board_OpenTile(Board *board, int x, int y){
 		board->first_move = 0;
 	}
 
-	if(board->shown[id] == SHOWN_FLAG) return;
+	if(board->shown[id] == SHOWN_FLAG){
+		return;
+	}
+
+	if(board->shown[id] == SHOWN){
+		Board_OpenAdjacentIfFlagged(board, x, y);
+		return;
+	}
 
 	Board_FloodFill(board, x, y);
 
@@ -142,6 +151,48 @@ static void Board_PutFlag(Board *board, int x, int y){
 	else
 		board->shown[id] = SHOWN_FLAG;
 
+}
+
+static void Board_PutFlagOnAllBombs(Board *board){
+	int id;
+
+	for(int i = 0; i < board->width; i++){
+		for(int j = 0; j < board->height; j++){
+			id = i + j * board->width;
+
+			if(board->tile[id] == TILE_HAS_BOMB)
+				board->shown[id] = SHOWN_FLAG;
+		}
+	}
+}
+
+static void Board_OpenAdjacentIfFlagged(Board *board, int x, int y){
+	int id, bomb_count, flag_count;
+
+	bomb_count = Board_BombCount(board, x, y);
+	flag_count = 0;
+
+	for(int i = -1 + x; i <= 1 + x; i++){
+		for(int j = -1 + y; j <= 1 + y; j++){
+			if(!Board_CheckBounds(board, i, j)) continue;
+
+			id = i + j * board->width;
+
+			if(board->shown[id] == SHOWN_FLAG) flag_count++;
+		}
+	}
+
+	if(flag_count == bomb_count){
+		for(int i = -1 + x; i <= 1 + x; i++){
+			for(int j = -1 + y; j <= 1 + y; j++){
+				if(!Board_CheckBounds(board, i, j)) continue;
+	
+				id = i + j * board->width;
+
+				if(board->shown[id] == NOT_SHOWN) board->shown[id] = SHOWN;
+			}
+		}
+	}
 }
 
 Board * Board_Create(int width, int height, int bombs){
@@ -230,6 +281,9 @@ void Board_Update(Game *game, Board *board){
 	else{
 		board->mouse_up = 1;
 	}
+
+	if(Board_HasWon(board))
+		Board_PutFlagOnAllBombs(board);
 }
 
 void Board_Render(Game *game, Board *board){

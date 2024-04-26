@@ -187,7 +187,7 @@ void Menu_Init(Game *game){
 	menu.mainmenu.play = Button_Create(
 			BUTTON_OFFSET_X,
 			0,
-			300,
+			360,
 			150,
 			game->button_texture,
 			BUTTON_ID_PLAY
@@ -239,7 +239,7 @@ void Menu_Init(Game *game){
 	menu.difficulty.easy = Button_Create(
 			BUTTON_OFFSET_X,
 			0,
-			300,
+			360,
 			120,
 			game->button_texture,
 			BUTTON_ID_EASY
@@ -248,7 +248,7 @@ void Menu_Init(Game *game){
 	menu.difficulty.medium = Button_Create(
 			BUTTON_OFFSET_X,
 			0,
-			300,
+			360,
 			160,
 			game->button_texture,
 			BUTTON_ID_MEDIUM
@@ -257,7 +257,7 @@ void Menu_Init(Game *game){
 	menu.difficulty.hard = Button_Create(
 			BUTTON_OFFSET_X,
 			0,
-			300,
+			360,
 			200,
 			game->button_texture,
 			BUTTON_ID_HARD
