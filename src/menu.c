@@ -15,7 +15,9 @@ enum BUTTON_ID{
 	BUTTON_ID_HARD,
 	BUTTON_ID_CUSTOM,
 	BUTTON_ID_AGAIN,
-	BUTTON_ID_BACK
+	BUTTON_ID_BACK,
+	BACKRETRY_ID_BACK = 0,
+	BACKRETRY_ID_RETRY = 1,
 };
 
 enum MENU_STATES{
@@ -43,6 +45,9 @@ struct{
 
 	int mouse_down;
 	int mouse_up;
+
+	Button back;
+	Button retry;
 
 	struct{
 		Button play;
@@ -106,7 +111,7 @@ static Button Button_Create(int x, int y, int ini, int end, Texture *texture, in
 	Button button;
 
 	button.x = x;
-	button.y = y;
+	button.y = ini;
 	button.ini = ini;
 	button.end = end;
 	button.texture = texture;
@@ -263,6 +268,24 @@ void Menu_Init(Game *game){
 			game->button_texture,
 			BUTTON_ID_HARD
 			);
+
+	menu.back = Button_Create(
+			20,
+			0,
+			20,
+			20,
+			game->backretry_texture,
+			BACKRETRY_ID_BACK
+			);
+
+	menu.retry = Button_Create(
+			60,
+			0,
+			20,
+			20,
+			game->backretry_texture,
+			BACKRETRY_ID_RETRY
+			);
 }
 
 void Menu_Update(Game *game){
@@ -282,9 +305,11 @@ void Menu_Update(Game *game){
 			Button_Update(game, &menu.mainmenu.play);
 
 			if(Button_Pressed(game, &menu.mainmenu.play)){
+				/*
 				Button_Reset(&menu.difficulty.easy);
 				Button_Reset(&menu.difficulty.medium);
 				Button_Reset(&menu.difficulty.hard);
+				*/
 				menu.state = MENU_DIFFICULTY;
 			}
 
@@ -294,6 +319,11 @@ void Menu_Update(Game *game){
 			Button_Update(game, &menu.difficulty.easy);
 			Button_Update(game, &menu.difficulty.medium);
 			Button_Update(game, &menu.difficulty.hard);
+			Button_Update(game, &menu.back);
+
+			if(Button_Pressed(game, &menu.back)){
+				menu.state = MENU_MAIN;
+			}
 
 			if(Button_Pressed(game, &menu.difficulty.easy)){
 				menu.state = MENU_PLAY;
@@ -324,6 +354,8 @@ void Menu_Update(Game *game){
 
 		case MENU_PLAY:
 			Board_Update(game, menu.board);
+			Button_Update(game, &menu.back);
+			Button_Update(game, &menu.retry);
 
 			if(Board_HasWon(menu.board)){
 				menu.state = MENU_WIN;
@@ -339,6 +371,23 @@ void Menu_Update(Game *game){
 				Button_Reset(&menu.gameover.back);
 			}
 
+			if(Button_Pressed(game, &menu.retry)){
+				menu.state = MENU_PLAY;
+				Board_Destroy(menu.board);
+
+				menu.board = Board_Create(
+						menu.board_options.w,
+						menu.board_options.h,
+						menu.board_options.bombs
+						);
+			}
+
+			if(Button_Pressed(game, &menu.back)){
+				menu.state = MENU_DIFFICULTY;
+				Board_Destroy(menu.board);
+				menu.board = NULL;
+			}
+
 			break;
 
 		case MENU_GAMEOVER:
@@ -350,7 +399,7 @@ void Menu_Update(Game *game){
 				menu.state = MENU_MAIN;
 				Board_Destroy(menu.board);
 				menu.board = NULL;
-				Button_Reset(&menu.mainmenu.play);
+				//Button_Reset(&menu.mainmenu.play);
 			}
 
 			if(Button_Pressed(game, &menu.gameover.again)){
@@ -363,7 +412,7 @@ void Menu_Update(Game *game){
 						menu.board_options.bombs
 						);
 
-				Button_Reset(&menu.mainmenu.play);
+				//Button_Reset(&menu.mainmenu.play);
 			}
 			break;
 
@@ -376,7 +425,7 @@ void Menu_Update(Game *game){
 				menu.state = MENU_MAIN;
 				Board_Destroy(menu.board);
 				menu.board = NULL;
-				Button_Reset(&menu.mainmenu.play);
+				//Button_Reset(&menu.mainmenu.play);
 			}
 
 			if(Button_Pressed(game, &menu.youwin.again)){
@@ -389,7 +438,7 @@ void Menu_Update(Game *game){
 						menu.board_options.bombs
 						);
 
-				Button_Reset(&menu.mainmenu.play);
+				//Button_Reset(&menu.mainmenu.play);
 			}
 
 			break;
@@ -406,10 +455,13 @@ void Menu_Render(Game *game){
 			Button_Render(game, &menu.difficulty.easy);
 			Button_Render(game, &menu.difficulty.medium);
 			Button_Render(game, &menu.difficulty.hard);
+			Button_Render(game, &menu.back);
 			break;
 
 		case MENU_PLAY:
 			Board_Render(game, menu.board);
+			Button_Render(game, &menu.back);
+			Button_Render(game, &menu.retry);
 			break;
 
 		case MENU_GAMEOVER:

@@ -106,11 +106,12 @@ void Context_UpdateTime(Context *context){
 }
 
 void Context_Destroy(Context *context){
-	SDL_DestroyWindow(context->window);
 	SDL_DestroyRenderer(context->renderer);
+	SDL_DestroyWindow(context->window);
 
 	TTF_Quit();
 	Mix_Quit();
 	IMG_Quit();
 	SDL_Quit();
+	free(context);
 }

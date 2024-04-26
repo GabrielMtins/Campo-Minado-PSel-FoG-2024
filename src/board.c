@@ -176,6 +176,8 @@ static void Board_OpenAdjacentIfFlagged(Board *board, int x, int y){
 		for(int j = -1 + y; j <= 1 + y; j++){
 			if(!Board_CheckBounds(board, i, j)) continue;
 
+			if(i == x && j == y) continue;
+
 			id = i + j * board->width;
 
 			if(board->shown[id] == SHOWN_FLAG) flag_count++;
@@ -186,10 +188,13 @@ static void Board_OpenAdjacentIfFlagged(Board *board, int x, int y){
 		for(int i = -1 + x; i <= 1 + x; i++){
 			for(int j = -1 + y; j <= 1 + y; j++){
 				if(!Board_CheckBounds(board, i, j)) continue;
+
+				if(i == x && j == y) continue;
 	
 				id = i + j * board->width;
 
-				if(board->shown[id] == NOT_SHOWN) board->shown[id] = SHOWN;
+				if(board->shown[id] == NOT_SHOWN)
+					board->shown[id] = SHOWN;
 			}
 		}
 	}
@@ -333,4 +338,5 @@ void Board_Render(Game *game, Board *board){
 void Board_Destroy(Board *board){
 	free(board->tile);
 	free(board->shown);
+	free(board);
 }

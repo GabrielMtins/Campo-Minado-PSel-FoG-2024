@@ -8,6 +8,7 @@ typedef struct{
 	Context *context;
 	Texture *board_texture;
 	Texture *button_texture;
+	Texture *backretry_texture;
 } Game;
 
 Game * Game_Create(void);

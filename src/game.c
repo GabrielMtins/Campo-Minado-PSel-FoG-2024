@@ -19,6 +19,7 @@ Game * Game_Create(void){
 
 	game->board_texture = Texture_Load(game->context, "res/tile.png", 16, 16);
 	game->button_texture = Texture_Load(game->context, "res/button.png", 160, 32);
+	game->backretry_texture = Texture_Load(game->context, "res/button2.png", 32, 32);
 
 	Menu_Init(game);
 	
@@ -51,5 +52,8 @@ void Game_Destroy(Game *game){
 	Menu_Quit();
 	Texture_Destroy(game->board_texture);
 	Texture_Destroy(game->button_texture);
+	Texture_Destroy(game->backretry_texture);
 	Context_Destroy(game->context);
+
+	free(game);
 }
