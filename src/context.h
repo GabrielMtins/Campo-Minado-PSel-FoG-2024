@@ -8,8 +8,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
-#define INTERNAL_WIDTH 480
-#define INTERNAL_HEIGHT 272
+#define INTERNAL_WIDTH 640
+#define INTERNAL_HEIGHT 360
 
 typedef struct{
 	SDL_Window *window;
