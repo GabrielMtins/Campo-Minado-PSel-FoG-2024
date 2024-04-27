@@ -20,11 +20,11 @@ há bombas ao redor é aberto).
 - Montar três opções de dificuldade (iniciante, intermediário, avançado).
 - Função de abrir quadrados em volta se todas as bombas ao redor
 estão assinaladas.
-- Opção de reinício de partida. (Não sei se devo criar uma distribuição nova ou não)
-- Construir uma interface para o usuário
+- Opção de reinício de partida. (Não sei se devo criar uma distribuição nova ou não).
+- Construir uma interface para o usuário.
+- Contador de tempo.
 
 ### Não Realizadas
-- Contador de tempo.
 
 ### Metas que eu criei
 - Implementar suporte para jogar o jogo com controle / teclado.
