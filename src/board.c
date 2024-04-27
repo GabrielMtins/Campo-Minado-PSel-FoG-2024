@@ -193,8 +193,9 @@ static void Board_OpenAdjacentIfFlagged(Board *board, int x, int y){
 	
 				id = i + j * board->width;
 
-				if(board->shown[id] == NOT_SHOWN)
-					board->shown[id] = SHOWN;
+				if(board->shown[id] == NOT_SHOWN){
+					Board_OpenTile(board, i, j);
+				}
 			}
 		}
 	}

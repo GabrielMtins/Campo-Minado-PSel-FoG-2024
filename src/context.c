@@ -32,7 +32,7 @@ Context * Context_Create(const char *title){
 
 	SDL_SetRenderDrawBlendMode(context->renderer, SDL_BLENDMODE_BLEND);
 
-	context->font = NULL;
+	context->font = TTF_OpenFont("res/sans2.ttf", 12);
 
 	context->quit = 0;
 	context->delta_time = 0;
@@ -108,6 +108,7 @@ void Context_UpdateTime(Context *context){
 void Context_Destroy(Context *context){
 	SDL_DestroyRenderer(context->renderer);
 	SDL_DestroyWindow(context->window);
+	TTF_CloseFont(context->font);
 
 	TTF_Quit();
 	Mix_Quit();

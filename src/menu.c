@@ -6,6 +6,9 @@
 #define BUTTON_WIDTH 160
 #define BUTTON_HEIGHT 32
 
+static const int timer_fg[4] = {0xff, 0xff, 0xff, 0xff};
+static const int timer_bg[4] = {0x60, 0x60, 0x60, 0xff};
+
 enum BUTTON_ID{
 	BUTTON_ID_PLAY = 0,
 	BUTTON_ID_YOUWIN,
@@ -48,6 +51,8 @@ struct{
 
 	Button back;
 	Button retry;
+
+	double timer;
 
 	struct{
 		Button play;
@@ -331,6 +336,7 @@ void Menu_Update(Game *game){
 
 				menu.board_options.w = menu.board_options.h = 9;
 				menu.board_options.bombs = 10;
+				menu.timer = 0;
 			}
 
 			if(Button_Pressed(game, &menu.difficulty.medium)){
@@ -339,6 +345,7 @@ void Menu_Update(Game *game){
 
 				menu.board_options.w = menu.board_options.h = 16;
 				menu.board_options.bombs = 40;
+				menu.timer = 0;
 			}
 
 			if(Button_Pressed(game, &menu.difficulty.hard)){
@@ -348,6 +355,7 @@ void Menu_Update(Game *game){
 				menu.board_options.w = 24;
 				menu.board_options.h = 20;
 				menu.board_options.bombs = 99;
+				menu.timer = 0;
 			}
 
 			break;
@@ -356,6 +364,8 @@ void Menu_Update(Game *game){
 			Board_Update(game, menu.board);
 			Button_Update(game, &menu.back);
 			Button_Update(game, &menu.retry);
+
+			menu.timer += game->context->delta_time;
 
 			if(Board_HasWon(menu.board)){
 				menu.state = MENU_WIN;
@@ -380,12 +390,14 @@ void Menu_Update(Game *game){
 						menu.board_options.h,
 						menu.board_options.bombs
 						);
+				menu.timer = 0;
 			}
 
 			if(Button_Pressed(game, &menu.back)){
 				menu.state = MENU_DIFFICULTY;
 				Board_Destroy(menu.board);
 				menu.board = NULL;
+				menu.timer = 0;
 			}
 
 			break;
@@ -399,7 +411,7 @@ void Menu_Update(Game *game){
 				menu.state = MENU_MAIN;
 				Board_Destroy(menu.board);
 				menu.board = NULL;
-				//Button_Reset(&menu.mainmenu.play);
+				menu.timer = 0;
 			}
 
 			if(Button_Pressed(game, &menu.gameover.again)){
@@ -411,8 +423,7 @@ void Menu_Update(Game *game){
 						menu.board_options.h,
 						menu.board_options.bombs
 						);
-
-				//Button_Reset(&menu.mainmenu.play);
+				menu.timer = 0;
 			}
 			break;
 
@@ -425,7 +436,7 @@ void Menu_Update(Game *game){
 				menu.state = MENU_MAIN;
 				Board_Destroy(menu.board);
 				menu.board = NULL;
-				//Button_Reset(&menu.mainmenu.play);
+				menu.timer = 0;
 			}
 
 			if(Button_Pressed(game, &menu.youwin.again)){
@@ -438,7 +449,7 @@ void Menu_Update(Game *game){
 						menu.board_options.bombs
 						);
 
-				//Button_Reset(&menu.mainmenu.play);
+				menu.timer = 0;
 			}
 
 			break;
@@ -446,6 +457,9 @@ void Menu_Update(Game *game){
 }
 
 void Menu_Render(Game *game){
+	char text_timer[200];
+	sprintf(text_timer, "Tempo: %02d:%05.2lf", (int) (menu.timer / 60), fmod(menu.timer, 60));
+
 	switch(menu.state){
 		case MENU_MAIN:
 			Button_Render(game, &menu.mainmenu.play);
@@ -462,6 +476,16 @@ void Menu_Render(Game *game){
 			Board_Render(game, menu.board);
 			Button_Render(game, &menu.back);
 			Button_Render(game, &menu.retry);
+
+			Draw_DrawTextWithBox(
+					game->context,
+					20,
+					100,
+					4,
+					timer_bg,
+					timer_fg,
+					text_timer
+					);
 			break;
 
 		case MENU_GAMEOVER:
@@ -469,6 +493,16 @@ void Menu_Render(Game *game){
 			Button_Render(game, &menu.gameover.gameover_button);
 			Button_Render(game, &menu.gameover.back);
 			Button_Render(game, &menu.gameover.again);
+
+			Draw_DrawTextWithBox(
+					game->context,
+					20,
+					100,
+					4,
+					timer_bg,
+					timer_fg,
+					text_timer
+					);
 			break;
 
 		case MENU_WIN:
@@ -476,6 +510,16 @@ void Menu_Render(Game *game){
 			Button_Render(game, &menu.youwin.youwin_button);
 			Button_Render(game, &menu.youwin.back);
 			Button_Render(game, &menu.youwin.again);
+
+			Draw_DrawTextWithBox(
+					game->context,
+					20,
+					100,
+					4,
+					timer_bg,
+					timer_fg,
+					text_timer
+					);
 			break;
 	}
 }
