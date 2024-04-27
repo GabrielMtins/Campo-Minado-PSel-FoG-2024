@@ -19,6 +19,7 @@ enum BUTTON_ID{
 	BUTTON_ID_CUSTOM,
 	BUTTON_ID_AGAIN,
 	BUTTON_ID_BACK,
+	BUTTON_ID_TITLE,
 	BACKRETRY_ID_BACK = 0,
 	BACKRETRY_ID_RETRY = 1,
 };
@@ -55,6 +56,7 @@ struct{
 	double timer;
 
 	struct{
+		Button title;
 		Button play;
 	} mainmenu;
 
@@ -195,11 +197,22 @@ void Menu_Init(Game *game){
 	menu.state = MENU_MAIN;
 	menu.board = NULL;
 
+	menu.mainmenu.title = Button_Create(
+			BUTTON_OFFSET_X,
+			0,
+			-60,
+			60,
+			game->button_texture,
+			BUTTON_ID_TITLE
+			);
+
+	menu.mainmenu.title.is_label = 1;
+
 	menu.mainmenu.play = Button_Create(
 			BUTTON_OFFSET_X,
 			0,
 			360,
-			150,
+			160,
 			game->button_texture,
 			BUTTON_ID_PLAY
 			);
@@ -308,6 +321,7 @@ void Menu_Update(Game *game){
 	switch(menu.state){
 		case MENU_MAIN:
 			Button_Update(game, &menu.mainmenu.play);
+			Button_Update(game, &menu.mainmenu.title);
 
 			if(Button_Pressed(game, &menu.mainmenu.play)){
 				/*
@@ -463,6 +477,7 @@ void Menu_Render(Game *game){
 	switch(menu.state){
 		case MENU_MAIN:
 			Button_Render(game, &menu.mainmenu.play);
+			Button_Render(game, &menu.mainmenu.title);
 			break;
 
 		case MENU_DIFFICULTY:
