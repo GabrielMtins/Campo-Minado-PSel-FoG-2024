@@ -1,7 +1,7 @@
 #include "context.h"
 #include "game.h"
 
-int main(void){
+int main(int argc, char **argv){
 	Game *game;
 
 	game = Game_Create();
