@@ -35,3 +35,35 @@ estão assinaladas.
 - Opção de dificuldade personalizada.
 - Salvar em arquivo os recordes dos melhores tempos em cada dificuldade
 e permitir que o usuário veja o ranking.
+
+## Compilando
+
+### Linux
+Para compilar para linux, instale os seguintes pacotes pelo seu package manager:
+```
+libsdl2-dev
+libsdl2-image-dev
+libsdl2-ttf-dev
+```
+
+No Debian, o sistema que estou usando, basta instalar com o seguinte comando:
+```
+$ sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+```
+
+Após isso, basta digitar
+```
+$ make
+```
+
+### Windows
+Para compilar para windows, abra o arquivo Makefile\_win32 e configure-o devidamente.
+Baixe as bibliotecas SDL2, SDL2-image e SDL2-ttf e escreva os diretórios desses devidamente
+no Makefile\_win32.
+Com isso feito, abra seu terminal/prompt de comando com o programa make já configurado
+e digite:
+```
+$ make -f Makefile\_win32
+```
+Observação: a compilação foi testada com o compilador mingw. Mais especificamente,
+o compilador mingw instalado no Debian.
