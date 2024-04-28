@@ -24,13 +24,6 @@ estão assinaladas.
 - Construir uma interface para o usuário.
 - Contador de tempo.
 
-### Não Realizadas
-
-### Metas que eu criei
-- Implementar suporte para jogar o jogo com controle / teclado.
-- Portar o jogo para consoles por meio de homebrew.
-- Fazer uma música de fundo.
-
 ### Metas que provavelmente não irei implementar
 - Opção de dificuldade personalizada.
 - Salvar em arquivo os recordes dos melhores tempos em cada dificuldade
