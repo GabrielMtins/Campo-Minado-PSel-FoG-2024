@@ -1,0 +1,15 @@
+# Digite o seu compilador
+CC=x86_64-w64-mingw32-gcc
+
+# Digite os diretórios que possuem o include e o lib das respectivas bibliotecas
+SDL2_DIR=
+IMG_DIR=
+TTF_DIR=
+
+CFLAGS=-Wall -Wextra -pedantic -std='c99'
+LFLAGS=-lmingw32 -lSDL2main -mwindows -lSDL2 -lSDL2_image -lSDL2_ttf -lm
+INCFLAGS=-I$(SDL2_DIR)/include -I$(IMG_DIR)/include -I$(TTF_DIR)/include
+LDFLAGS=-L$(SDL2_DIR)/lib -L$(IMG_DIR)/lib -L$(TTF_DIR)/lib
+
+all:
+	$(CC) src/*.c $(CFLAGS) $(INCFLAGS) $(LDFLAGS) $(LFLAGS) -o CampoMinado.exe
