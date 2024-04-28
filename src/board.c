@@ -61,7 +61,7 @@ static void Board_Generate(Board *board, int og_x, int og_y){
 
 		id = x + y * board->width;
 
-		if(board->tile[id] == TILE_HAS_BOMB || abs(x - og_x) <= 1 || abs(y - og_y) <= 1){
+		if(board->tile[id] == TILE_HAS_BOMB || (abs(x - og_x) <= 1 && abs(y - og_y) <= 1)){
 			i--;
 			continue;
 		}
