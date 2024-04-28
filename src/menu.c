@@ -503,6 +503,7 @@ void Menu_Update(Game *game){
 
 void Menu_Render(Game *game){
 	char text_timer[200];
+	char text_bombs[200];
 	sprintf(text_timer, "Tempo: %02d:%05.2lf", (int) (menu.timer / 60), fmod(menu.timer, 60));
 
 	switch(menu.state){
@@ -532,6 +533,18 @@ void Menu_Render(Game *game){
 					timer_fg,
 					text_timer
 					);
+
+			sprintf(text_bombs, "Bombas: %02d/%02d", menu.board->num_flags, menu.board_options.bombs);
+
+			Draw_DrawTextWithBox(
+					game->context,
+					20,
+					140,
+					4,
+					timer_bg,
+					timer_fg,
+					text_bombs
+					);
 			break;
 
 		case MENU_GAMEOVER:
@@ -550,6 +563,18 @@ void Menu_Render(Game *game){
 					timer_fg,
 					text_timer
 					);
+
+			sprintf(text_bombs, "Bombas: %02d/%02d", menu.board->num_flags, menu.board_options.bombs);
+
+			Draw_DrawTextWithBox(
+					game->context,
+					20,
+					140,
+					4,
+					timer_bg,
+					timer_fg,
+					text_bombs
+					);
 			break;
 
 		case MENU_WIN:
@@ -567,6 +592,18 @@ void Menu_Render(Game *game){
 					timer_bg,
 					timer_fg,
 					text_timer
+					);
+
+			sprintf(text_bombs, "Bombas: %02d/%02d", menu.board->num_flags, menu.board_options.bombs);
+
+			Draw_DrawTextWithBox(
+					game->context,
+					20,
+					140,
+					4,
+					timer_bg,
+					timer_fg,
+					text_bombs
 					);
 			break;
 	}

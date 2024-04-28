@@ -146,22 +146,29 @@ static void Board_PutFlag(Board *board, int x, int y){
 
 	if(board->shown[id] == SHOWN) return;
 
-	if(board->shown[id] == SHOWN_FLAG)
+	if(board->shown[id] == SHOWN_FLAG){
 		board->shown[id] = NOT_SHOWN;
-	else
+		board->num_flags--;
+	}
+	else{
 		board->shown[id] = SHOWN_FLAG;
+		board->num_flags++;
+	}
 
 }
 
 static void Board_PutFlagOnAllBombs(Board *board){
 	int id;
+	board->num_flags = 0;
 
 	for(int i = 0; i < board->width; i++){
 		for(int j = 0; j < board->height; j++){
 			id = i + j * board->width;
 
-			if(board->tile[id] == TILE_HAS_BOMB)
+			if(board->tile[id] == TILE_HAS_BOMB){
 				board->shown[id] = SHOWN_FLAG;
+				board->num_flags++;
+			}
 		}
 	}
 }
@@ -219,6 +226,7 @@ Board * Board_Create(int width, int height, int bombs){
 	board->mouse_up = 1;
 
 	board->first_move = 1;
+	board->num_flags = 0;
 	
 	Board_Generate(board, 0, 0);
 

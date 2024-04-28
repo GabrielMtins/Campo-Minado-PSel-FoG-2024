@@ -3,7 +3,6 @@
 #define LEVEL_OF_WHITE 200
 
 static void Texture_GetSrcDstRect(Texture *texture, int x, int y, int id, SDL_Rect *src, SDL_Rect *dst);
-static SDL_Texture * Texture_GetWhiteTexture(SDL_Renderer *renderer, SDL_Surface *surface);
 
 static void Texture_GetSrcDstRect(Texture *texture, int x, int y, int id, SDL_Rect *src, SDL_Rect *dst){
 	SDL_Rect dst_rect = {x, y, texture->cell_width, texture->cell_height};
@@ -32,23 +31,6 @@ static void Texture_GetSrcDstRect(Texture *texture, int x, int y, int id, SDL_Re
 	*dst = dst_rect;
 }
 
-static SDL_Texture * Texture_GetWhiteTexture(SDL_Renderer *renderer, SDL_Surface *surface){
-	uint8_t r, g, b, a;
-	uint32_t *pixels = surface->pixels;
-
-	for(int i = 0; i < surface->w * surface->h; i++){
-		SDL_GetRGBA(pixels[i], surface->format, &r, &g, &b, &a);
-
-		if(a != 0){
-			r = g = b = 255;
-			a = LEVEL_OF_WHITE;
-			pixels[i] = SDL_MapRGBA(surface->format, r, g, b, a);
-		}
-	}
-
-	return SDL_CreateTextureFromSurface(renderer, surface);
-}
-
 Texture * Texture_Load(Context *context, const char *filename, int cell_width, int cell_height){
 	Texture *texture;
 	SDL_Surface *surface = IMG_Load(filename);
@@ -61,8 +43,6 @@ Texture * Texture_Load(Context *context, const char *filename, int cell_width, i
 	texture = (Texture *) malloc(sizeof(Texture));
 
 	texture->texture = SDL_CreateTextureFromSurface(context->renderer, surface);
-	texture->texture_light = Texture_GetWhiteTexture(context->renderer, surface);
-	SDL_SetTextureBlendMode(texture->texture_light, SDL_BLENDMODE_ADD);
 
 	texture->texture_width = surface->w;
 	texture->texture_height = surface->h;
@@ -90,23 +70,7 @@ void Texture_RenderCell(Context *context, Texture *texture, int x, int y, int id
 	SDL_RenderCopy(context->renderer, texture->texture, &src_rect, &dst_rect);
 }
 
-void Texture_RenderCellLighted(Context *context, Texture *texture, int x, int y, int id){
-	Texture_RenderCell(context, texture, x, y, id);
-
-	SDL_Rect src_rect, dst_rect;
-
-	Texture_GetSrcDstRect(texture, x, y, id, &src_rect, &dst_rect);
-
-	if(id == -1){
-		SDL_RenderCopy(context->renderer, texture->texture, NULL, &dst_rect);
-		return;
-	}
-
-	SDL_RenderCopy(context->renderer, texture->texture_light, &src_rect, &dst_rect);
-}
-
 void Texture_Destroy(Texture *texture){
 	SDL_DestroyTexture(texture->texture);
-	SDL_DestroyTexture(texture->texture_light);
 	free(texture);
 }

@@ -30,6 +30,8 @@ typedef struct{
 	int mouse_up;
 
 	int first_move;
+
+	int num_flags;
 } Board;
 
 Board * Board_Create(int width, int height, int bombs);
