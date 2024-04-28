@@ -3,7 +3,7 @@ EXEC ?= main
 
 CCFLAGS := -O2 -std=c99 -Wall -Wextra -pedantic
 
-LIBFLAGS := -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lm
+LIBFLAGS := -lSDL2 -lSDL2_image -lSDL2_ttf -lm
 
 SRC_DIR := src
 

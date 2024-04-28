@@ -5,7 +5,6 @@ Context * Context_Create(const char *title){
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 	IMG_Init(IMG_INIT_PNG);
-	Mix_Init(MIX_INIT_OGG);
 	TTF_Init();
 
 	context = (Context *) malloc(sizeof(Context));
@@ -111,7 +110,6 @@ void Context_Destroy(Context *context){
 	TTF_CloseFont(context->font);
 
 	TTF_Quit();
-	Mix_Quit();
 	IMG_Quit();
 	SDL_Quit();
 	free(context);
