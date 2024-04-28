@@ -20,8 +20,11 @@ enum BUTTON_ID{
 	BUTTON_ID_AGAIN,
 	BUTTON_ID_BACK,
 	BUTTON_ID_TITLE,
+	BUTTON_ID_REPEAT,
 	BACKRETRY_ID_BACK = 0,
 	BACKRETRY_ID_RETRY = 1,
+	BACKRETRY_ID_MINUS = 2,
+	BACKRETRY_ID_PLUS = 3
 };
 
 enum MENU_STATES{
@@ -70,12 +73,14 @@ struct{
 		Button gameover_button;
 		Button again;
 		Button back;
+		Button repeat;
 	} gameover;
 
 	struct{
 		Button youwin_button;
 		Button again;
 		Button back;
+		Button repeat;
 	} youwin;
 
 	struct{
@@ -257,8 +262,18 @@ void Menu_Init(Game *game){
 			BUTTON_ID_BACK
 			);
 
+	menu.youwin.repeat = Button_Create(
+			BUTTON_OFFSET_X,
+			0,
+			360,
+			240,
+			game->button_texture,
+			BUTTON_ID_REPEAT
+			);
+
 	menu.gameover.back = menu.youwin.back;
 	menu.gameover.again = menu.youwin.again;
+	menu.gameover.repeat = menu.youwin.repeat;
 
 	menu.difficulty.easy = Button_Create(
 			BUTTON_OFFSET_X,
@@ -386,6 +401,7 @@ void Menu_Update(Game *game){
 				Button_Reset(&menu.youwin.youwin_button);
 				Button_Reset(&menu.youwin.again);
 				Button_Reset(&menu.youwin.back);
+				Button_Reset(&menu.youwin.repeat);
 			}
 
 			if(Board_HasLost(menu.board)){
@@ -393,6 +409,7 @@ void Menu_Update(Game *game){
 				Button_Reset(&menu.gameover.gameover_button);
 				Button_Reset(&menu.gameover.again);
 				Button_Reset(&menu.gameover.back);
+				Button_Reset(&menu.gameover.repeat);
 			}
 
 			if(Button_Pressed(game, &menu.retry)){
@@ -420,6 +437,7 @@ void Menu_Update(Game *game){
 			Button_Update(game, &menu.gameover.gameover_button);
 			Button_Update(game, &menu.gameover.back);
 			Button_Update(game, &menu.gameover.again);
+			Button_Update(game, &menu.gameover.repeat);
 
 			if(Button_Pressed(game, &menu.gameover.back)){
 				menu.state = MENU_MAIN;
@@ -439,12 +457,19 @@ void Menu_Update(Game *game){
 						);
 				menu.timer = 0;
 			}
+
+			if(Button_Pressed(game, &menu.gameover.repeat)){
+				menu.state = MENU_PLAY;
+				Board_RepeatMap(menu.board);
+				menu.timer = 0;
+			}
 			break;
 
 		case MENU_WIN:
 			Button_Update(game, &menu.youwin.youwin_button);
 			Button_Update(game, &menu.youwin.back);
 			Button_Update(game, &menu.youwin.again);
+			Button_Update(game, &menu.youwin.repeat);
 
 			if(Button_Pressed(game, &menu.youwin.back)){
 				menu.state = MENU_MAIN;
@@ -463,6 +488,12 @@ void Menu_Update(Game *game){
 						menu.board_options.bombs
 						);
 
+				menu.timer = 0;
+			}
+
+			if(Button_Pressed(game, &menu.youwin.repeat)){
+				menu.state = MENU_PLAY;
+				Board_RepeatMap(menu.board);
 				menu.timer = 0;
 			}
 
@@ -508,6 +539,7 @@ void Menu_Render(Game *game){
 			Button_Render(game, &menu.gameover.gameover_button);
 			Button_Render(game, &menu.gameover.back);
 			Button_Render(game, &menu.gameover.again);
+			Button_Render(game, &menu.gameover.repeat);
 
 			Draw_DrawTextWithBox(
 					game->context,
@@ -525,6 +557,7 @@ void Menu_Render(Game *game){
 			Button_Render(game, &menu.youwin.youwin_button);
 			Button_Render(game, &menu.youwin.back);
 			Button_Render(game, &menu.youwin.again);
+			Button_Render(game, &menu.youwin.repeat);
 
 			Draw_DrawTextWithBox(
 					game->context,

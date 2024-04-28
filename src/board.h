@@ -34,6 +34,8 @@ typedef struct{
 
 Board * Board_Create(int width, int height, int bombs);
 
+void Board_RepeatMap(Board *board);
+
 int Board_HasLost(Board *board);
 
 int Board_HasWon(Board *board);
