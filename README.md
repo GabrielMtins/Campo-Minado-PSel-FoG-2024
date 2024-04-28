@@ -63,7 +63,7 @@ no Makefile\_win32.
 Com isso feito, abra seu terminal/prompt de comando com o programa make já configurado
 e digite:
 ```
-$ make -f Makefile\_win32
+$ make -f Makefile_win32
 ```
 Observação: a compilação foi testada com o compilador mingw. Mais especificamente,
 o compilador mingw instalado no Debian.
