@@ -1,5 +1,5 @@
 CC = gcc
-EXEC ?= main
+EXEC ?= CampoMinado
 
 CCFLAGS := -O2 -std=c99 -Wall -Wextra -pedantic
 

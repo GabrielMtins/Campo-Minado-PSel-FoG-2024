@@ -236,6 +236,8 @@ Board * Board_Create(int width, int height, int bombs){
 void Board_RepeatMap(Board *board){
 	for(int i = 0; i < board->width * board->height; i++)
 		board->shown[i] = NOT_SHOWN;
+
+	board->num_flags = 0;
 }
 
 int Board_HasLost(Board *board){
