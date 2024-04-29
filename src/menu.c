@@ -502,6 +502,8 @@ void Menu_Update(Game *game){
 }
 
 void Menu_Render(Game *game){
+	const uint8_t *keys = SDL_GetKeyboardState(NULL);
+
 	char text_timer[200];
 	char text_bombs[200];
 	sprintf(text_timer, "Tempo: %02d:%05.2lf", (int) (menu.timer / 60), fmod(menu.timer, 60));
@@ -549,10 +551,13 @@ void Menu_Render(Game *game){
 
 		case MENU_GAMEOVER:
 			Board_Render(game, menu.board);
-			Button_Render(game, &menu.gameover.gameover_button);
-			Button_Render(game, &menu.gameover.back);
-			Button_Render(game, &menu.gameover.again);
-			Button_Render(game, &menu.gameover.repeat);
+
+			if(!keys[SDL_SCANCODE_TAB]){
+				Button_Render(game, &menu.gameover.gameover_button);
+				Button_Render(game, &menu.gameover.back);
+				Button_Render(game, &menu.gameover.again);
+				Button_Render(game, &menu.gameover.repeat);
+			}
 
 			Draw_DrawTextWithBox(
 					game->context,
@@ -579,10 +584,13 @@ void Menu_Render(Game *game){
 
 		case MENU_WIN:
 			Board_Render(game, menu.board);
-			Button_Render(game, &menu.youwin.youwin_button);
-			Button_Render(game, &menu.youwin.back);
-			Button_Render(game, &menu.youwin.again);
-			Button_Render(game, &menu.youwin.repeat);
+
+			if(!keys[SDL_SCANCODE_TAB]){
+				Button_Render(game, &menu.youwin.youwin_button);
+				Button_Render(game, &menu.youwin.back);
+				Button_Render(game, &menu.youwin.again);
+				Button_Render(game, &menu.youwin.repeat);
+			}
 
 			Draw_DrawTextWithBox(
 					game->context,
