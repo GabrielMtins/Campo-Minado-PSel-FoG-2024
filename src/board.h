@@ -8,6 +8,9 @@
 
 #include "game.h"
 
+/* A maior parte da lógica do jogo de fato está nesse arquivo e na
+ * sua implementação */
+
 enum SHOWN{
 	NOT_SHOWN = 0,
 	SHOWN,
@@ -36,6 +39,7 @@ typedef struct{
 
 Board * Board_Create(int width, int height, int bombs);
 
+/* Essa função é utilizada para repetir a tentativa de um mapa */
 void Board_RepeatMap(Board *board);
 
 int Board_HasLost(Board *board);

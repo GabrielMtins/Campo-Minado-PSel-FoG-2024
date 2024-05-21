@@ -3,6 +3,8 @@
 
 #include "game.h"
 
+/* Arquivo que cuida do menu do jogo */
+
 double Menu_Smooth(double i);
 
 void Menu_Init(Game *game);

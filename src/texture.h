@@ -3,6 +3,10 @@
 
 #include "context.h"
 
+/* Arquivo que cuida de texturas. Cada textura é composta
+ * de células, assim é possível carregar apenas uma textura
+ * em vez de várias */
+
 typedef struct{
 	SDL_Texture *texture;
 	int cell_width, cell_height;

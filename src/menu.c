@@ -89,12 +89,22 @@ struct{
 	} board_options;
 } menu;
 
+/* Retorna 1 caso o mouse esteja dentro do retângulo */
 static int Menu_IsInsideButton(Game *game, int *rect);
 
+/* Cria um botão */
 static Button Button_Create(int x, int y, int ini, int end, Texture *texture, int id);
+
+/* Reseta os membros do botão */
 static void Button_Reset(Button *button);
+
+/* Atualiza o botão */
 static void Button_Update(Game *game, Button *button);
+
+/* Renderiza o botão */
 static void Button_Render(Game *game, Button *button);
+
+/* Retorna 1 caso o botão foi pressionado, 0 caso contrário */
 static int Button_Pressed(Game *game, Button *button);
 
 static const int color_button_overlay[4] = {255, 255, 255, 50};
@@ -201,6 +211,8 @@ double Menu_Smooth(double i){
 void Menu_Init(Game *game){
 	menu.state = MENU_MAIN;
 	menu.board = NULL;
+
+	/* Aqui vou criar cada botão do menu */
 
 	menu.mainmenu.title = Button_Create(
 			BUTTON_OFFSET_X,
@@ -322,6 +334,7 @@ void Menu_Init(Game *game){
 }
 
 void Menu_Update(Game *game){
+	/* Atualizando as características do mouse */
 	if(SDL_GetMouseState(NULL, NULL)){
 		menu.mouse_down = 1;
 		menu.mouse_up = 0;
@@ -333,6 +346,7 @@ void Menu_Update(Game *game){
 		menu.mouse_up = 1;
 	}
 
+	/* Fazendo um switch para cada estado do menu */
 	switch(menu.state){
 		case MENU_MAIN:
 			Button_Update(game, &menu.mainmenu.play);
@@ -360,6 +374,8 @@ void Menu_Update(Game *game){
 			}
 
 			if(Button_Pressed(game, &menu.difficulty.easy)){
+				/* Se a dificuldade for fácil,
+				 * criar um campo 9x9 com 10 bombas */
 				menu.state = MENU_PLAY;
 				menu.board = Board_Create(9, 9, 10);
 
@@ -369,6 +385,8 @@ void Menu_Update(Game *game){
 			}
 
 			if(Button_Pressed(game, &menu.difficulty.medium)){
+				/* Se a dificuldade for média,
+				 * criarr um campo 16x16 com 40 bombas */
 				menu.state = MENU_PLAY;
 				menu.board = Board_Create(16, 16, 40);
 
@@ -378,6 +396,8 @@ void Menu_Update(Game *game){
 			}
 
 			if(Button_Pressed(game, &menu.difficulty.hard)){
+				/* Se a dificuldade for difícil,
+				 * criar um campo 24x20 com 99 bombas */
 				menu.state = MENU_PLAY;
 				menu.board = Board_Create(24, 20, 99);
 
@@ -506,6 +526,7 @@ void Menu_Render(Game *game){
 
 	char text_timer[200];
 	char text_bombs[200];
+	/* Formatação para printar o tempo passado */
 	sprintf(text_timer, "Tempo: %02d:%05.2lf", (int) (menu.timer / 60), fmod(menu.timer, 60));
 
 	switch(menu.state){
@@ -536,6 +557,7 @@ void Menu_Render(Game *game){
 					text_timer
 					);
 
+			/* Formatação para printar o número de bombas */
 			sprintf(text_bombs, "Bombas: %02d/%02d", menu.board->num_flags, menu.board_options.bombs);
 
 			Draw_DrawTextWithBox(

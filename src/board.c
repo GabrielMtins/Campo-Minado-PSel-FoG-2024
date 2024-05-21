@@ -6,15 +6,37 @@
 static const int color_mouse_over[4] = {255, 255, 255, 60};
 static const int color_mouse_click[4] = {255, 255, 255, 200};
 
+/* Retorna 1 caso a coordenada (x, y) esteja dentro da fronteira do jogo */
 static int Board_CheckBounds(Board *board, int x, int y);
+
+/* Conta quantas bombas há ao redor da coordenada (x, y) */
 static int Board_BombCount(Board *board, int x, int y);
+
+/* Gera um padrão aleatório para o campo */
 static void Board_Generate(Board *board, int og_x, int og_y);
+
+/* Retorna os valores de quanto o campo está distante de (0, 0) */
 static void Board_GetOffset(Board *board, int *offset_x, int *offset_y);
+
+/* Retorna o tile em que o mouse está em cima */
 static void Board_GetMouseTile(Game *game, Board *board, int *tile_x, int *tile_y);
+
+/* Uma ferramenta de "balde de tinta". Utilizada quando o local aberto não possui
+ * bombas ao redor, para assim abrir seus vizinhos também */
 static void Board_FloodFill(Board *board, int x, int y);
+
+/* Abre o tile na posição (x, y) */
 static void Board_OpenTile(Board *board, int x, int y);
+
+/* Põe uma bandeirinha na coordenada (x, y) */
 static void Board_PutFlag(Board *board, int x, int y);
+
+/* Utilizada para quando o jogador venceu. Põe-se banderinhas
+ * em todas as bombas */
 static void Board_PutFlagOnAllBombs(Board *board);
+
+/* Abre os tiles ao redor de um tile caso o número de bombas ao redor
+ * dele já tenha sido demarcado */
 static void Board_OpenAdjacentIfFlagged(Board *board, int x, int y);
 
 static int Board_CheckBounds(Board *board, int x, int y){
@@ -118,6 +140,10 @@ static void Board_OpenTile(Board *board, int x, int y){
 
 	id = x + y * board->width;
 
+	/* Caso seja o primeior movimento, gere o campo de forma
+	 * que o tile clicado não seja uma bomba,
+	 * assim o jogador não consegue perder no primeiro
+	 * movimento */
 	if(board->first_move){
 		Board_Generate(board, x, y);
 		board->first_move = 0;
