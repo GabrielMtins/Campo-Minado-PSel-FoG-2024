@@ -59,4 +59,4 @@ e digite:
 $ make -f Makefile_win32
 ```
 Observação: a compilação foi testada com o compilador mingw. Mais especificamente,
-o compilador mingw instalado no Debian.
+o compilador cross-compiler mingw64 instalado no Debian.
