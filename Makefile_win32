@@ -1,5 +1,5 @@
 # Digite o seu compilador
-CC=x86_64-w64-mingw32-gcc
+CC=gcc
 
 # Digite os diretórios que possuem o include e o lib das respectivas bibliotecas
 SDL2_DIR=
