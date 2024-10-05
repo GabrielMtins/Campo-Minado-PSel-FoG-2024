@@ -37,14 +37,18 @@ void Game_Render(Game *game){
 	SDL_RenderPresent(game->context->renderer);
 }
 
+void Game_Loop(Game *game){
+	Context_PollEvent(game->context);
+		
+	Game_Update(game);
+	Game_Render(game);
+		
+	Context_UpdateTime(game->context);
+}
+
 void Game_Run(Game *game){
 	while(!game->context->quit){
-		Context_PollEvent(game->context);
-		
-		Game_Update(game);
-		Game_Render(game);
-		
-		Context_UpdateTime(game->context);
+		Game_Loop(game);
 	}
 }
 

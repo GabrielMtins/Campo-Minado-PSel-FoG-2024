@@ -9,8 +9,13 @@ Context * Context_Create(const char *title){
 
 	context = (Context *) malloc(sizeof(Context));
 
+#ifdef __EMSCRIPTEN__
+	context->window_width = INTERNAL_WIDTH;
+	context->window_height = INTERNAL_HEIGHT;
+#else
 	context->window_width = INTERNAL_WIDTH * 2;
 	context->window_height = INTERNAL_HEIGHT * 2;
+#endif
 
 	context->window = SDL_CreateWindow(
 			title,

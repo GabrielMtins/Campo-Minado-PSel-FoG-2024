@@ -17,6 +17,8 @@ void Game_Update(Game *game);
 
 void Game_Render(Game *game);
 
+void Game_Loop(Game *game);
+
 void Game_Run(Game *game);
 
 void Game_Destroy(Game *game);
