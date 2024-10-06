@@ -60,3 +60,10 @@ $ make -f Makefile_win32
 ```
 Observação: a compilação foi testada com o compilador mingw. Mais especificamente,
 o compilador cross-compiler mingw64 instalado no Debian.
+
+### WebAssembly
+Para compilar para WebAssembly, configure o seu ambiente com emcc, e digite no
+terminal:
+```
+$ make -f Makefile_web
+```
